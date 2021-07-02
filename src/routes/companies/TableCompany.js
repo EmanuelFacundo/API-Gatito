@@ -7,6 +7,18 @@ module.exports = {
 
   create(company) {
     return model.create(company)
+  },
+
+  async findById(id) {
+    const company = await model.findOne({
+      where: {
+        id
+      }
+    })
+
+    if (!company) throw new Error(`Couldn't found company`)
+
+    return company.dataValues
   }
 
 }

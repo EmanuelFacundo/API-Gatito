@@ -1,13 +1,13 @@
-const routesProviders = require('express').Router()
+const routesCompanies = require('express').Router()
 const tableProvider = require('./TableCompany')
 const Company = require('./Company')
 
-routesProviders.get('/findAll', async (req, res) => {
-  const providers = await tableProvider.findAll()
-  res.status(200).json(providers)
+routesCompanies.get('/findAll', async (req, res) => {
+  const companies = await tableProvider.findAll()
+  res.status(200).json(companies)
 })
 
-routesProviders.post('/create', async (req, res) => {
+routesCompanies.post('/create', async (req, res) => {
   const newCompany = req.body
   const company = new Company(newCompany)
   await company.create()
@@ -20,4 +20,26 @@ routesProviders.post('/create', async (req, res) => {
 
 })
 
-module.exports = routesProviders
+routesCompanies.get('/:idCompany', async (req, res) => {
+
+  try {
+    const id = req.params.idCompany
+    const company = new Company({ id })
+    await company.findById()
+      .then( _ => {
+        res.status(200).json(company)
+      })
+      .catch(err => {
+        res.status(400).json({
+          message: err.message
+        })
+      })
+  } catch (err) {
+    res.status(400).json({
+      message: err.message
+    })
+  }
+
+})
+
+module.exports = routesCompanies
