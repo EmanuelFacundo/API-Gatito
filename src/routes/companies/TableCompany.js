@@ -19,6 +19,13 @@ module.exports = {
     if (!company) throw new Error(`Couldn't found company`)
 
     return company.dataValues
-  }
+  },
 
+  update(id, dataForUpdate){
+    return model.update(dataForUpdate, {
+      where: {
+        id
+      }
+    })
+  }
 }

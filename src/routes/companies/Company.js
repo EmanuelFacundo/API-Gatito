@@ -26,7 +26,6 @@ class Company {
 
   async findById() {
     const companyFound = await TableCompany.findById(this.id)
-    console.log(companyFound.company)
     this.company = companyFound.company
     this.email = companyFound.email
     this.category = companyFound.category
@@ -34,7 +33,26 @@ class Company {
     this.updatedAt = companyFound.updatedAt
     this.version = companyFound.version
   }
-  
+
+  async updateCompany() {
+    await TableCompany.findById(this.id)
+    const fields = ['company', 'email', 'category']
+    const dataForUpdate = {}
+
+    fields.forEach(field => {
+      const value = this[field]
+      
+      if (typeof value === typeof '' && value.length > 0) {
+        dataForUpdate[field] = value
+      }
+    })
+
+    if (Object.keys(dataForUpdate).length === 0) {
+      throw new Error('No data provided to update')
+    }
+
+    await TableCompany.update(this.id, dataForUpdate)
+  }
 }
 
 module.exports = Company
